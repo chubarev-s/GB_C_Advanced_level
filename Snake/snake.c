@@ -150,62 +150,66 @@ int main(){
 	printSnake(snake);
 	while(1)
 	{
-		key = getch(); 
-		if ((key == 'w')||(key == 'W')||(key == 'a')||(key == 'A')||(key == 's')||(key == 'S')||(key == 'd')||(key == 'D'))
+		if(kbhit())
 		{
-			switch (key)
+			key = getch(); 
+			if ((key == 'w')||(key == 'W')||(key == 'a')||(key == 'A')||(key == 's')||(key == 'S')||(key == 'd')||(key == 'D'))
 			{
-			case 'a':
-			case 'A':
-				snake = moveLeft(snake);
-				last_key = 'a';
-				break;
-			case 'w':
-			case 'W':
-				snake = moveUp(snake);
-				last_key = 'w';
-				break;
-			case 'd':
-			case 'D':
-				snake = moveRight(snake);
-				last_key = 'd';
-				break;
-			case 's':
-			case 'S':
-				snake = moveDown(snake);
-				last_key = 's';
-				break;
-			default:
-				break;
+				switch (key)
+				{
+				case 'a':
+				case 'A':
+					snake = moveLeft(snake);
+					last_key = 'a';
+					break;
+				case 'w':
+				case 'W':
+					snake = moveUp(snake);
+					last_key = 'w';
+					break;
+				case 'd':
+				case 'D':
+					snake = moveRight(snake);
+					last_key = 'd';
+					break;
+				case 's':
+				case 'S':
+					snake = moveDown(snake);
+					last_key = 's';
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		else {  
-			switch (last_key)
-			{
-			case 'a':
-			case 'A':
-				snake = moveLeft(snake);
-				key = 'a';
-				break;
-			case 'w':
-			case 'W':
-				snake = moveUp(snake);
-				key = 'w';
-				break;
-			case 'd':
-			case 'D':
-				snake = moveRight(snake);
-				key = 'd';
-				break;
-			case 's':
-			case 'S':
-				snake = moveDown(snake);
-				key = 's';
-				break;
-			default:
-				break;
-			}
+				switch (last_key)
+				{
+				case 'a':
+				case 'A':
+					snake = moveLeft(snake);
+					key = 'a';
+					break;
+				case 'w':
+				case 'W':
+					snake = moveUp(snake);
+					key = 'w';
+					break;
+				case 'd':
+				case 'D':
+					snake = moveRight(snake);
+					key = 'd';
+					break;
+				case 's':
+				case 'S':
+					snake = moveDown(snake);
+					key = 's';
+					break;
+				default:
+					break;
+				}
 		}
+		sleep(1);
 		system("cls");
 		printSnake(snake);
 		
