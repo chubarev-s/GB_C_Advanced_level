@@ -3,6 +3,8 @@
 #include <conio.h>
 #include <unistd.h>
 #include <inttypes.h>
+#include <time.h>
+
 
 #define MAX_X 15
 #define MAX_Y 15
@@ -16,6 +18,10 @@ typedef struct tail_t{
 typedef struct snake_t{
 	int x;
 	int y;
+	int score;
+	int eat;
+	int food_x; 
+	int food_y;
 	struct tail_t * tail;
 	size_t tsize;
 }  snake_t;
@@ -26,6 +32,7 @@ struct snake_t initSnake(int x, int y, size_t tsize){
 	snake.x = x;
 	snake.y = y;
 	snake.tsize = tsize;
+	snake.eat = 0;
 	snake.tail = (tail_t *) malloc (sizeof(tail_t) * 100);
 	for (int i =0; i < tsize; ++i){
 		snake.tail[i].x = x + i +1;
@@ -34,10 +41,21 @@ struct snake_t initSnake(int x, int y, size_t tsize){
 	return snake;
 }
 
+/*задаём функцию случайной генерации чисел*/
+int getRandomNumber(int min, int max) {
+ 	return min + rand() % (max - min +1);
+}
 	
+/*Функция инициализации символа "Q", еды*/
+void initFoodPosition(snake_t *snake) {
+	snake->food_x = getRandomNumber(0, (MAX_X-1));
+	snake->food_y = getRandomNumber(0, (MAX_Y-1));
+}
+
 /* Рисуем змейку вида: @** */
-void printSnake(struct snake_t snake){
+uint8_t printSnake(struct snake_t *snake){
 		char matrix[MAX_X][MAX_Y];
+		uint8_t ex_w = 0, r_x = 0, r_y = 0;
 		for (int i = 0; i < MAX_X; ++i)
 		{
 			for (int j = 0; j < MAX_Y; ++j)
@@ -46,28 +64,51 @@ void printSnake(struct snake_t snake){
 			}
 		}
 		
-		for (int i = 0; i < snake.tsize; ++i)
+		for (int i = 0; i < snake->tsize; ++i)
 		{
-			matrix[snake.tail[i].x][snake.tail[i].y] = '*';
-		}
-		if(matrix[snake.x][snake.y] != '*'){
-			
-			matrix[snake.x][snake.y] = '@';
-			for (int j = 0; j < MAX_Y; ++j)
-			{
-				for (int i = 0; i < MAX_X; ++i)
-				{
-					printf("%c", matrix[i][j]);
-				}
-				printf("\n");
-			}
-		} else {
-			printf("X", matrix[snake.x][snake.y]);
-			printf("GAME OWER!");
-			snake = initSnake( 10, 5, 5);
-			printSnake(snake);
+			matrix[snake->tail[i].x][snake->tail[i].y] = '*';
 		}
 		
+		matrix[snake->food_x][snake->food_y] = 'Q'; 
+
+		switch (matrix[snake->x][snake->y])
+		{
+			case ' ':
+				matrix[snake->x][snake->y] = '@'; 
+				for (int j = 0; j < MAX_Y; ++j)
+				{
+					for (int i = 0; i < MAX_X; ++i)
+					{
+						printf("%c", matrix[i][j]);
+					}
+					printf("\n");
+				}
+				break;
+			case '*':
+				printExit(snake);
+				return 1;
+				break;
+			case 'Q':
+				snake->tsize = snake->tsize + 1;
+				snake->score = snake->score + 1;
+				matrix[snake->food_x][snake->food_y] = ' ';
+				matrix[snake->x][snake->y] = '@';
+				for (int j = 0; j < MAX_Y; ++j)
+				{
+					for (int i = 0; i < MAX_X; ++i)
+					{
+						printf("%c", matrix[i][j]);
+					}
+					printf("\n");
+				}
+				snake->eat = 0;
+				initFoodPosition(snake); // Генерируем новое положение символа "Q"
+				break;
+			default:
+				printf("error, %c", matrix[snake->x][snake->y]);
+				break;
+		}
+		return 0;
 	}
 	
 /*Движение змейки влево*/
@@ -143,75 +184,129 @@ snake_t moveUp(snake_t snake){
 }	
 
 
-int main(){
-	int a = 0;
-	char key, last_key = 'a';
-	struct snake_t snake = initSnake( 10, 5, 5);
-	printSnake(snake);
-	while(1)
-	{
-		if(kbhit())
+/*Функция выхода*/
+void printExit(snake_t *head){
+	char matrix[MAX_X][MAX_Y];
+		for (int i = 0; i < MAX_X; ++i)
 		{
-			key = getch(); 
-			if ((key == 'w')||(key == 'W')||(key == 'a')||(key == 'A')||(key == 's')||(key == 'S')||(key == 'd')||(key == 'D'))
+			for (int j = 0; j < MAX_Y; ++j)
 			{
-				switch (key)
-				{
-				case 'a':
-				case 'A':
-					snake = moveLeft(snake);
-					last_key = 'a';
-					break;
-				case 'w':
-				case 'W':
-					snake = moveUp(snake);
-					last_key = 'w';
-					break;
-				case 'd':
-				case 'D':
-					snake = moveRight(snake);
-					last_key = 'd';
-					break;
-				case 's':
-				case 'S':
-					snake = moveDown(snake);
-					last_key = 's';
-					break;
-				default:
-					break;
-				}
+				matrix[i][j] = ' ';
 			}
 		}
-		else {  
-				switch (last_key)
+	
+	printf("GAME OWER! Your score %d\n", head->score);
+	*head = initSnake( 10, 5, 5);
+	printSnake(head);
+}
+
+int main(){
+	int a = 0, exit_while = 0, close = 0;
+	char key, last_key = 'a', key_menu;
+	struct snake_t snake = initSnake( 10, 5, 1);
+	snake.score = 0;
+	initFoodPosition(&snake);
+	printSnake(&snake);
+	while (close != 1)
+	{
+		printf("1. Start game\n");
+		printf("2. Exit\n");
+		key_menu = getch();
+		switch (key_menu)
+		{
+		case '1':
+			exit_while = 0;
+			while(exit_while != 1)
+			{
+				if(kbhit())
 				{
-				case 'a':
-				case 'A':
-					snake = moveLeft(snake);
-					key = 'a';
-					break;
-				case 'w':
-				case 'W':
-					snake = moveUp(snake);
-					key = 'w';
-					break;
-				case 'd':
-				case 'D':
-					snake = moveRight(snake);
-					key = 'd';
-					break;
-				case 's':
-				case 'S':
-					snake = moveDown(snake);
-					key = 's';
-					break;
-				default:
-					break;
+					key = getch(); 
+					if ((key == 'w')||(key == 'W')||(key == 'a')||(key == 'A')||(key == 's')||(key == 'S')||(key == 'd')||(key == 'D'))
+					{
+						switch (key)
+						{
+						case 'a':
+						case 'A':
+							snake = moveLeft(snake);
+							last_key = 'a';
+							break;
+						case 'w':
+						case 'W':
+							snake = moveUp(snake);
+							last_key = 'w';
+							break;
+						case 'd':
+						case 'D':
+							snake = moveRight(snake);
+							last_key = 'd';
+							break;
+						case 's':
+						case 'S':
+							snake = moveDown(snake);
+							last_key = 's';
+							break;
+						default:
+							break;
+						}
+					}
 				}
+				else if(key == 'p'){
+					printf("Pause\nYour score: %d\nClick any key for contine or \"e\" for exit\n", snake.score);
+					key = getch();
+					if(key == 'e')
+						exit_while = 1;
+				}else 
+					{  
+						switch (last_key)
+						{
+						case 'a':
+						case 'A':
+							snake = moveLeft(snake);
+							key = 'a';
+							break;
+						case 'w':
+						case 'W':
+							snake = moveUp(snake);
+							key = 'w';
+							break;
+						case 'd':
+						case 'D':
+							snake = moveRight(snake);
+							key = 'd';
+							break;
+						case 's':
+						case 'S':
+							snake = moveDown(snake);
+							key = 's';
+							break;
+						default:
+							break;
+						}
+				}
+				if(snake.score < 4){
+					usleep(400000);
+				}
+				if((snake.score >= 4)&&(snake.score < 7)){
+					usleep(250000);
+				}
+				if((snake.score >= 7)&&(snake.score < 10)){
+					usleep(100000);
+				}
+				if(snake.score >= 10){
+					usleep(50000);
+				}
+				system("cls");
+				if(exit_while !=1 )
+				{
+					exit_while = printSnake(&snake);
+				}
+			}
+			break;
+		case '2':
+			close = 1;
+		default:
+			break;
 		}
-		sleep(1);
-		system("cls");
-		printSnake(snake);
 		
 	}
 	return 0;
