@@ -100,6 +100,12 @@ void printSnake(struct snake_t snake, struct snake_t snake2, struct snake_t snak
 		case 1:
 			matrix[snake.x][snake.y] = '@';
 			for(int i = 0; i < snake.tsize; ++i){
+				if((snake.x == snake.tail[i].x)&&(snake.y == snake.tail[i].y))
+				{	PAUSE = 1; 
+					count_drons = 0; 
+					printf("The drone is broken, press the E button to reboot!\n\n\n\n");
+					break;
+				}
 				matrix[snake.tail[i].x][snake.tail[i].y] = '+';
 			}
 			break;
@@ -108,7 +114,13 @@ void printSnake(struct snake_t snake, struct snake_t snake2, struct snake_t snak
 			matrix[snake.x][snake.y] = '@';
         	matrix[snake2.x][snake2.y] = '%';
 			for(int i = 0; i < snake.tsize; ++i){
-            	matrix[snake.tail[i].x][snake.tail[i].y] = '+';
+            	if((snake.x == snake.tail[i].x)&&(snake.y == snake.tail[i].y))
+				{	PAUSE = 1; 
+					count_drons = 0; 
+					printf("The drone is broken, press the E button to reboot!\n\n\n\n");
+					break;
+				}
+				matrix[snake.tail[i].x][snake.tail[i].y] = '+';
 			}
 			for(int i = 0; i < snake2.tsize; ++i){
 				matrix[snake2.tail[i].x][snake2.tail[i].y] = '*';
@@ -120,7 +132,13 @@ void printSnake(struct snake_t snake, struct snake_t snake2, struct snake_t snak
 			matrix[snake2.x][snake2.y] = '%';
 			matrix[snake3.x][snake3.y] = '&';
 			for(int i = 0; i < snake.tsize; ++i){
-            	matrix[snake.tail[i].x][snake.tail[i].y] = '+';
+            	if((snake.x == snake.tail[i].x)&&(snake.y == snake.tail[i].y))
+				{	PAUSE = 1; 
+					count_drons = 0; 
+					printf("The drone is broken, press the E button to reboot!\n\n\n\n");
+					break;
+				}
+				matrix[snake.tail[i].x][snake.tail[i].y] = '+';
 			}
 			for(int i = 0; i < snake2.tsize; ++i){
 				matrix[snake2.tail[i].x][snake2.tail[i].y] = '*';
@@ -136,7 +154,13 @@ void printSnake(struct snake_t snake, struct snake_t snake2, struct snake_t snak
 			matrix[snake3.x][snake3.y] = '&';
 			matrix[snake4.x][snake4.y] = '~';
 			for(int i = 0; i < snake.tsize; ++i){
-            	matrix[snake.tail[i].x][snake.tail[i].y] = '+';
+            	if((snake.x == snake.tail[i].x)&&(snake.y == snake.tail[i].y))
+				{	PAUSE = 1; 
+					count_drons = 0; 
+					printf("The drone is broken, press the E button to reboot!\n\n\n\n");
+					break;
+				}
+				matrix[snake.tail[i].x][snake.tail[i].y] = '+';
 			}
 			for(int i = 0; i < snake2.tsize; ++i){
 				matrix[snake2.tail[i].x][snake2.tail[i].y] = '*';
@@ -156,6 +180,12 @@ void printSnake(struct snake_t snake, struct snake_t snake2, struct snake_t snak
 			matrix[snake4.x][snake4.y] = '~';
 			matrix[snake5.x][snake5.y] = 'Q';
 			for(int i = 0; i < snake.tsize; ++i){
+				if((snake.x == snake.tail[i].x)&&(snake.y == snake.tail[i].y))
+				{	PAUSE = 1; 
+					count_drons = 0; 
+					printf("The drone is broken, press the E button to reboot!\n\n\n\n");
+					break;
+				}
 				matrix[snake.tail[i].x][snake.tail[i].y] = '+';
 			}
 			for(int i = 0; i < snake2.tsize; ++i){

@@ -77,7 +77,7 @@ int k_1 = 2, k_2 = 2, flag = 0, s1_exit = 0;
 int s2_1 = 0, s2_2 = 0, s2_flag = 0, s2_exit = 0;
 int s3_1 = 0, s3_2 = 0, s3_flag = 0, s3_exit = 0;
 int s4_1 = 0, s4_2 = 0, s4_flag = 0, s4_exit = 0;
-int s5_1 = 0, s5_2 = 0, s5_flag = 0, s5_exit = 0;
+int s5_1 = 1, s5_2 = 1, s5_flag = 0, s5_exit = 0;
 /*Бот для дрона*/
 void generateSnakeDirection(snake_t *snake, snake_t *snake2, snake_t *snake3, snake_t *snake4,snake_t *snake5, food_t food, int count_snake, int s1_auto_pil){
 	if(s1_auto_pil == 1){
@@ -397,7 +397,7 @@ void generateSnakeDirection(snake_t *snake, snake_t *snake2, snake_t *snake3, sn
 				if((snake5->x == (FIVE_DRONE-s5_2))&&(snake5->y == 1)&&(s5_flag == 1)){snake5->direction = DOWN; s5_1++;}
 				if((snake5->y == (SIZE_Y-1))&&(snake5->x == (FIVE_DRONE-s5_1))&&(s5_flag == 1)){snake5->direction = LEFT;s5_2++;}
 				if((snake5->x == (FIVE_DRONE-s5_2))&&(snake5->y == (SIZE_Y-1))&&(s5_flag == 1)){snake5->direction = UP;s5_1++;}
-				if(s5_1 == (FIVE_DRONE - 1)){s5_1 = s5_2 = 0; s5_flag = 0; s5_exit = 1;}
+				if(s5_1 == (FIVE_DRONE - 1)){s5_1 = s5_2 = 1; s5_flag = 0; s5_exit = 1;}
 			} else {
 				if(snake5->y > (SIZE_Y)){
 					if((snake5->x < (SIZE_X))){snake5->direction = LEFT;}

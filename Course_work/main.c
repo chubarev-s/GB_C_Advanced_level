@@ -5,17 +5,7 @@ int main(){
 	int exit_while = 0, close = 0, count_drons = 1, while_drons = 0;
 	char key_menu, drons;
     PAUSE = 0;
-	struct snake_t snake  = initSnake( 1, MAX_Y-1, 0);
-	struct snake_t snake2 = initSnake( 2, MAX_Y-1, 0);
-    struct snake_t snake3 = initSnake( 3, MAX_Y-1, 0);
-	struct snake_t snake4 = initSnake( 4, MAX_Y-1, 0);
-    struct snake_t snake5 = initSnake( 5, MAX_Y-1, 0);
-	snake.score = 0;
-	snake2.score = 0;
-    snake3.score = 0;
-    snake4.score = 0;
-    snake5.score = 0;
-	food_t food = initFood();
+	
 	while (close != 1)
 	{
 		printf("1. Start game\n");
@@ -25,6 +15,17 @@ int main(){
 		{
 		case '1':
 			exit_while = 0;
+			struct snake_t snake  = initSnake( 1, MAX_Y-1, 0);
+			struct snake_t snake2 = initSnake( 2, MAX_Y-1, 0);
+			struct snake_t snake3 = initSnake( 3, MAX_Y-1, 0);
+			struct snake_t snake4 = initSnake( 4, MAX_Y-1, 0);
+			struct snake_t snake5 = initSnake( 5, MAX_Y-1, 0);
+			snake.score = 0;
+			snake2.score = 0;
+			snake3.score = 0;
+			snake4.score = 0;
+			snake5.score = 0;
+			food_t food = initFood();
 			printf("Select the number of drones from 1 to 5: ");
 			while(while_drons != 1){
 				if(_kbhit()){
@@ -119,7 +120,7 @@ int main(){
 					}
 					
 				}
-                usleep(200);
+                usleep(100);
 				system("cls");
                 printSnake(snake, snake2, snake3, snake4, snake5, food, count_drons);
 			}
